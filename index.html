@@ -2,8 +2,11 @@
 <html>
 <head>
 <script>
-function setCookie(cname,cvalue)
-  document.cookie = cname + "=" + cvalue + ";" + ";path=/";
+function setCookie(cname,cvalue,exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 function getCookie(cname) {
@@ -22,16 +25,20 @@ function getCookie(cname) {
   return "";
 }
 
-function test() {
-  let name = getCookie("username");
-  if (name == "") {
-    name = prompt("what is your name","");
+function checkCookie() {
+  let user = getCookie("username");
+  if (user != "") {
+    alert("Welcome again " + user);
+  } else {
+     user = prompt("Please enter your name:","");
+     if (user != "" && user != null) {
+       setCookie("username", user, 30);
+     }
   }
-  alert("Hello " + name);
 }
 </script>
 </head>
 
-<body onload="test()"></body>
+<body onload="checkCookie()"></body>
 
 </html>
